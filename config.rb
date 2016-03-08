@@ -75,3 +75,9 @@ set :markdown_engine, :redcarpet
 activate :syntax
 
 Time.zone = 'Tokyo'
+
+activate :deploy do |deploy|
+  deploy.deploy_method = :git
+  deploy.remote = 'git@github.com:mozamimy/mozamimy.github.com.git'
+  deploy.branch = :master
+end
