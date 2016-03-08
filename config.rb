@@ -69,8 +69,14 @@ end
 
 # Markdown
 set :markdown_engine, :redcarpet
-# set :markdown, tables: true, autolink: true, gh_blockcode: true,
-#   fenced_code_blocks: true, with_toc_data: true, smartypants: true
+set :markdown, fenced_code_blocks: true, gh_blockcode: true
+
+slim_shortcut = {
+  "#" => { tag: "div", attr: "id" },
+  "." => { tag: "div", attr: "class" },
+  "&" => { tag: "input", attr: "type" },
+}
+set :slim, format: :html, sort_attrs: false, pretty: true, shortcut: slim_shortcut
 
 activate :syntax
 

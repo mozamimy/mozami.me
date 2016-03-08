@@ -25,3 +25,8 @@ hoge
 
 this is test
 
+```ruby
+class Usagi
+  def mofmof; end
+end
+```
