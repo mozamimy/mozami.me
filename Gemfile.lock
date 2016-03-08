@@ -148,7 +148,6 @@ DEPENDENCIES
   middleman-livereload
   middleman-syntax
   redcarpet (~> 3.3, >= 3.3.3)
-  rouge
   slim
 
 BUNDLED WITH

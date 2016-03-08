@@ -10,4 +10,3 @@ gem 'redcarpet', '~> 3.3', '>= 3.3.3'
 gem 'slim'
 
 gem "builder", "~> 3.0"
-gem 'rouge'
