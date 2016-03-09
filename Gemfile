@@ -8,5 +8,6 @@ gem 'middleman-deploy', git: 'https://github.com/middleman-contrib/middleman-dep
 
 gem 'redcarpet', '~> 3.3', '>= 3.3.3'
 gem 'slim'
+gem 'font-awesome-sass'
 
 gem "builder", "~> 3.0"

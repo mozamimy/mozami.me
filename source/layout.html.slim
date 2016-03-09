@@ -8,26 +8,77 @@ html lang='ja'
     - additional =  current_article.present? ? current_article.title : ''
     title = "tech.quellencode.org - #{additional}"
 
-  body
-    #main role='main'
-      = yield
+    = stylesheet_link_tag 'layout'
 
-    aside
-      h2 Recent Articles
-      ol
-        - blog.articles[0...10].each do |article|
-          li
-            = link_to article.title, article
-            span = article.date.strftime('%b %e')
+  header
+    .title-and-description
+      h1
+        = link_to 'Cry For the Moon', '/'
+      .description
+        | I'm coding to bring us much happiness <3
+    .mozamimy-icon
+      = image_tag 'mozamimy.png'
+    .mozamimy-name
+      | by @mozamimy
 
-      h2 Tags
-      ol
-        - blog.tags.each do |tag, articles|
-          li
-            = link_to "#{tag} (#{articles.size})", tag_path(tag)
+  #content_wrapper
+    body
+      #main role='main'
+        = yield
 
-      h2 By Year
-      ol
-        - blog.articles.group_by { |a| a.date.year }.each do |year, articles|
-          li
-            = link_to "#{year} (#{articles.size})", blog_year_path(year)
+      aside
+        section
+          h2 About
+
+          p
+            | 目を覚ましたら東京にあるウェブサービスをつくる会社にいました。
+          p
+            | うさぎやうさぎグッズ、不思議の国のアリスがスキ。
+          p
+            | Ruby on Rails を中心としたウェブ系の技術に興味があります。サービス開発から DevOps までもそもそと。
+          p
+            | 得られないものを嘆くのではなく、得られるまで一生懸命に頑張りたい。
+
+        section
+          h2 Links
+          ul.links
+            li
+              = link_to 'https://github.com/mozamimy', target: '_blank' do
+                i.fa.fa-github-alt
+            li
+              = link_to 'https://twitter.com/mozamimy', target: '_blank' do
+                i.fa.fa-twitter
+            li
+              = link_to 'http://note.quellencode.org/', target: '_blank' do
+                i.fa.fa-tumblr
+
+        section
+          h2 Recent Articles
+          ul.elements_list
+            - blog.articles[0...10].each do |article|
+              li
+                = link_to article do
+                  date datetime="#{article.date.iso8601}"
+                    = article.date.strftime('%Y-%m-%d')
+                  div
+                    = article.title
+
+        section
+          h2 Tags
+          ul.elements_list
+            - blog.tags.each do |tag, articles|
+              li
+                = link_to tag_path(tag) do
+                  div
+                    i.fa.fa-fw.fa-tag
+                    = "#{tag} (#{articles.size})"
+
+        section
+          h2 By Year
+          ul.elements_list
+            - blog.articles.group_by { |a| a.date.year }.each do |year, articles|
+              li
+                = link_to blog_year_path(year) do
+                  div
+                    i.fa.fa-fw.fa-calendar
+                    = "#{year} (#{articles.size})"
