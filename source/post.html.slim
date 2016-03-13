@@ -6,14 +6,16 @@ html lang='ja'
     meta name='viewport' content='width=device-width, initial-scale=1'
 
     - additional =  current_article.present? ? current_article.title : ''
-    title = "tech.quellencode.org - #{additional}"
+    title = "Cry for the Moon | #{additional}"
 
     = stylesheet_link_tag 'layout'
+
+    link rel="alternate" type="application/atom+xml" href="feed.xml" title="Atom"
 
   header
     .title-and-description
       h1
-        = link_to 'Cry For the Moon', '/'
+        = link_to 'Cry for the Moon', '/'
       .description
         | I'm coding to bring us much happiness <3
     .mozamimy-icon
