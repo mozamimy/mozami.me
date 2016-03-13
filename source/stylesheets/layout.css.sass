@@ -1,0 +1,97 @@
+@charset 'utf-8'
+
+@import 'reset.css.sass'
+
+@import 'font-awesome-sprockets'
+@import 'font-awesome'
+
+@import url(https://fonts.googleapis.com/css?family=Delius+Swash+Caps)
+@import url(//fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,600italic,700,700italic)
+
+@import 'variables.css.sass'
+@import 'elements.css.sass'
+
+body
+  font-size: 12pt
+  color: $text
+  margin: 0
+  font-family: Avenir, "Open Sans", "Helvetica Neue", Helvetica, Arial, Verdana, Roboto, "游ゴシック", "Yu Gothic", "游ゴシック体", "YuGothic", "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "Meiryo UI", "メイリオ", Meiryo, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif
+
+  a
+    color: $pink
+
+    &:hover
+      color: $yellow
+
+  header
+    background-color: $blue
+    font-family: 'Delius Swash Caps', cursive
+    font-weight: bold
+    padding: 20px 30px
+    text-align: center
+
+    .title-and-description
+      h1
+        margin: 0
+        font-size: 400%
+
+        a
+          color: $brown
+          text-decoration: none
+
+          &:hover
+            text-decoration: underline
+
+      .description
+        margin:
+          top: 20px
+          left: 8px
+        font-size: 150%
+
+    .mozamimy-icon
+      margin-top: 30px
+      img
+        width: 150px
+        border-radius: 150px
+
+  #content_wrapper
+    display: table
+    width: 90%
+    margin: 40px auto
+
+    #main
+      display: table-cell
+      width: 70%
+      padding-right: 25px
+
+      article
+        margin-bottom: 20px
+        padding-bottom: 20px
+
+        &.border
+          border-bottom: 1px solid $light_pink
+
+        h2, h3, h4
+          margin-top: 30px
+
+        .read_more
+          text-align: right
+
+
+    aside
+      display: table-cell
+      width: 30%
+      padding-left: 25px
+      border-left: 2px dashed $pink
+
+      h2
+        &:before
+          content: "\f186"
+          color: $light_pink
+          font-family: FontAwesome
+
+      .links
+        li
+          font-size: 220%
+          display: inline-block
+          margin-left: 10px
