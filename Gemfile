@@ -6,6 +6,7 @@ gem 'middleman-syntax'
 gem 'middleman-livereload'
 
 gem 'cheshirecat'
+gem 'travis'
 
 gem 'redcarpet', '~> 3.3', '>= 3.3.3'
 gem 'slim'
