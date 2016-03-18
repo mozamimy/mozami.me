@@ -1,0 +1,19 @@
+language: ruby
+sudo: false
+rvm:
+  - 2.3.0
+branches:
+  only:
+    - master
+before_install:
+  - openssl aes-256-cbc -K $encrypted_ed9e630a472a_key -iv $encrypted_ed9e630a472a_iv -in travis-deploy.enc -out travis-deploy -d
+  - cp .travis-deploy ~/.ssh/id_rsa
+  - cmod 600 ~/.ssh/id_rsa
+script:
+  - bundle exec middleman build
+after_success:
+  - "bundle exec cheshirecat ./build 'git@github.com:mozamimy/mozamimy.github.com.git' master 'Moza USANE', 'mozamimy@quellencode.org'"
+notifications:
+  on_success: change
+  on_failure: change
+  on_start: false
