@@ -11,6 +11,7 @@ html lang='ja'
     title = 'Cry for the Moon'
 
     = stylesheet_link_tag 'layout'
+    = Rouge::Themes::Base16::Solarized.render(scope: '.highlight')
 
     link rel="alternate" type="application/atom+xml" href="feed.xml" title="Atom"
 
