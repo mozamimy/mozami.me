@@ -33,6 +33,9 @@ body
     .title-and-description
       h1
         margin: 0
+        @media screen and (max-width: 480px)
+          font-size: 200%
+
         font-size: 400%
 
         a
@@ -51,15 +54,24 @@ body
     .mozamimy-icon
       margin-top: 30px
       img
+        @media screen and (max-width: 480px)
+          width: 75px
+
         width: 150px
         border-radius: 150px
 
   #content_wrapper
+    @media screen and (max-width: 480px)
+      display: block
     display: table
     width: 90%
     margin: 40px auto
 
     #main
+      @media screen and (max-width: 480px)
+        display: block
+        width: 100%
+
       display: table-cell
       width: 70%
       padding-right: 25px
@@ -90,6 +102,12 @@ body
 
 
     aside
+      @media screen and (max-width: 480px)
+        display: block
+        width: 100%
+        border: none
+        padding: 50px 0 0 0
+
       display: table-cell
       width: 30%
       padding-left: 25px
