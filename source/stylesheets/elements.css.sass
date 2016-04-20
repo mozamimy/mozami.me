@@ -1,5 +1,10 @@
 @import 'variables.css.sass'
 
+@media screen and (max-width: 480px)
+  #content_wrapper
+    img
+      width: 100% !important
+
 h1
   font-weight: 600
   font-size: 200%
@@ -36,6 +41,7 @@ p
   margin: 10px 0
   text-align: justify
   text-justify: inter-ideograph
+  word-break: break-all
 
 .elements_list
   list-style-type: none
