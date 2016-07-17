@@ -48,8 +48,8 @@ module CommonHelper
 end
 
 
-Itamae::Recipe::EvalContext.send(:include, CommonHelper)
-Itamae::Resource::Base::EvalContext.send(:include, CommonHelper)
+Itamae::Recipe::EvalContext.include(CommonHelper)
+Itamae::Resource::Base::EvalContext.include(CommonHelper)
 ```
 
 ### recipe_helper.rb
@@ -61,7 +61,7 @@ module RecipeHelper
   end
 end
 
-Itamae::Recipe::EvalContext.send(:include, RecipeHelper)
+Itamae::Recipe::EvalContext.include(RecipeHelper)
 ```
 
 ### resource_helper.rb
@@ -73,7 +73,7 @@ module ResourceHelper
   end
 end
 
-Itamae::Resource::Base::EvalContext.send(:include, ResourceHelper)
+Itamae::Resource::Base::EvalContext.include(ResourceHelper)
 ```
 
 ## recipe.rb
@@ -97,8 +97,8 @@ end
 ポイントは、
 
 ```ruby
-Itamae::Recipe::EvalContext.send(:include, CommonHelper)
-Itamae::Resource::Base::EvalContext.send(:include, CommonHelper)
+Itamae::Recipe::EvalContext.include(CommonHelper)
+Itamae::Resource::Base::EvalContext.include(CommonHelper)
 ```
 
 の 2 行です。
@@ -110,3 +110,10 @@ Itamae::Resource::Base::EvalContext.send(:include, CommonHelper)
 このテクニック、地味に [usamimi-devenv](https://github.com/mozamimy/usamimi-devenv) (わたしの開発環境の itamae ファイルの置き場所)で利用しているのですが、便利です。
 
 DRY な Itamae でスマートに構成管理をしましょう💓
+
+## 2016-07-18 修正
+
+<blockquote class="twitter-tweet" data-lang="en"><p lang="ja" dir="ltr">もうModule#includeはsendしなくていい時代ですよ</p>&mdash; k0kubun (@k0kubun) <a href="https://twitter.com/k0kubun/status/754657741952602112">July 17, 2016</a></blockquote>
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+こくぶんさんがボソッと言ってたので、確かに〜と思って紹介したコードを修正しました。
