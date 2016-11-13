@@ -70,12 +70,12 @@ $ nymphia -f /path/to/nymphia_file.rb -o /path/to/output_file
 また、SSH config の不満点のひとつに、あらゆる場所に IdentityFile に設定する同じファイルパスを書かないといけないという点があります。
 
 この問題は `identity_file` と `use_identify_file` で解決していて、`identity_file` に `:private` のような名前をつけて、`host` ブロックの中で `use_identify_file` のように書くといい感じに `IdentityFile` ディレクティブを埋め込んでくれます。
-また、`use_identify_file :usausa, :pyonpypn` のように、複数指定することも可能です。
+また、`use_identify_file :usausa, :pyonpyon` のように、複数指定することも可能です。
 
 ### ファイル分割
 
 `load` メソッドを使えば、ファイル分割をして設定を管理できます。
-以下のように書くと、トランスレータ時に other_nymphia_file.rb を読み込んで実行します。
+以下のように書くと、トランスレータ時に other\_nymphia\_file.rb を読み込んで実行します。
 
 ```ruby
 
