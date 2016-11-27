@@ -17,7 +17,7 @@ deploy:
   provider: script
   skip_cleanup: true
   script:
-    - "aws s3 sync build s3://mozami-me-test/ --delete"
+    - "aws s3 sync build s3://mozami.me/ --delete"
   on:
     branch: master
 notifications:
