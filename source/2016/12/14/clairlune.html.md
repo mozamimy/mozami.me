@@ -1,6 +1,6 @@
 ---
 title: ネイティブ npm モジュールをビルドして Lambda で使いやすくする Clairlune の紹介
-date: 2016-12-15
+date: 2016-12-14
 tagls: infra, javascript
 ---
 
