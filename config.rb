@@ -69,7 +69,7 @@ end
 
 # Markdown
 set :markdown_engine, :redcarpet
-set :markdown, fenced_code_blocks: true, gh_blockcode: true, smartypants: true, tables: true
+set :markdown, fenced_code_blocks: true, gh_blockcode: true, smartypants: true, tables: true, autolink: true
 
 slim_shortcut = {
   "#" => { tag: "div", attr: "id" },
