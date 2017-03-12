@@ -1,7 +1,7 @@
 ---
 title: ネイティブ npm モジュールをビルドして Lambda で使いやすくする Clairlune の紹介
 date: 2016-12-14
-tagls: infra, javascript
+tags: infra, javascript
 ---
 
 この記事は、[Serverless Advent Calendar 2016](http://qiita.com/advent-calendar/2016/serverless) の 15 日目の記事です。
