@@ -25,7 +25,7 @@ Cerebro が v0.5.1 のときに初めて導入し、Dockerfile は会社の GHE 
 現在 [v0.6.1](https://github.com/lmenezes/cerebro/releases/tag/v0.6.1) が available なので、いい機会なのでアップデートがてら Dockerfile を OSS にしました。
 ちょうどご家庭の Elasticsearch にも導入したかったので。
 
-- GitHub: [https://github.com/mozamimy/docker-cerebro](https://hub.docker.com/r/mozamimy/cerebro/)
+- GitHub: [https://github.com/mozamimy/docker-cerebro](https://github.com/mozamimy/docker-cerebro)
 - Docker Hub: [https://hub.docker.com/r/mozamimy/cerebro](https://hub.docker.com/r/mozamimy/cerebro)
 
 使い方は、GitHub リポジトリに置いてある docker-compose.yml を見てください。
