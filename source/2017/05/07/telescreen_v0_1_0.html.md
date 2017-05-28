@@ -55,5 +55,5 @@ $ telescreen --api-key=foobar --config=config.yml
 ```yaml
 - match: '.*'
   destinations:
-- {{ var "DEST_CHANNEL" | default "general" }}
+    - {{ var "DEST_CHANNEL" | default "general" }}
 ```
