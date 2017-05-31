@@ -4,6 +4,7 @@ gem 'middleman', '~> 4.0.0'
 gem 'middleman-blog'
 gem 'middleman-syntax'
 gem 'middleman-livereload'
+gem 'middleman-somemoji'
 
 gem 'cheshirecat'
 gem 'travis'
