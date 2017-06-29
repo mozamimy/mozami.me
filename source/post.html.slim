@@ -19,6 +19,7 @@ html lang='ja'
               h1
                 = current_article.title
 
+              = partial 'partials/social_buttons'
               = yield
 
         = partial 'partials/menu_column', locals: { blog: blog }
