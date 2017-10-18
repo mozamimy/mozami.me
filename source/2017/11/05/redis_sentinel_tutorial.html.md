@@ -201,3 +201,294 @@ Example 3 ではクライアント側に Sentinel を持たせる例で、Exampl
 
 わたしは Sentinel が Redis やクライアントと同居しているよりも、Sentinel だけが動く小さい t2 インスタンスを複数の AZ にまたがって 3 コ以上並べてクラスタリングするがいいかなと思っており、実戦投入するならばそのような構成にしようと思っています。レプリケーショングループごとに Sentinel クラスタが存在するのは煩雑ですし、そもそも active/standby 構成にすると 2 台になるので、split brain になる危険性があります。かといってクライアントに Sentinel を持たせるにしても、app および app-pantry はオートスケーリングによって増減するため、quorum をどうやって設定するねん、というような問題も出る上、Rails と同居するミドルウェアが増えるのも少しいやです。
 
+### やってみた
+
+習うより慣れろ、というわけで、Sentinel を手元の Mac で試してみました。ドキュメントの「A quick tutorial」の内容をもう少し具体的に書いていきます。
+
+このチュートリアルでは、手元のマシンのポート 6379 および 6380 でそれぞれ Redis の master と slave を listen させ、Sentinel はそれぞれポート 5000、5001、5002 で listen させます。
+
+まず、Redis の設定を `/opt/brew/etc/redis.conf` などから適当な作業ディレクトリに `redis.mster.conf` および `redis.slave.conf` のような名前でコピーし、`redis.slave.conf` の `port` を 6780 にして 2 コの Redis を起動します。
+
+```
+$ redis-server redis.master.conf
+$ redis-server redis.slave.conf
+```
+
+次に、レプリケーションを組むために slave で `SLAVEOF` コマンドを発行します。
+
+```
+$ redis-cli -p 6380 slaveof 127.0.0.1 6379
+```
+
+レプリケーションが行われているかどうか、適当に値を突っ込んで試してみましょう。
+
+```
+$ redis-cli -p 6379 set usausa pyonpyon
+$ redis-cli -p 6380 get usausa
+```
+
+次に Sentinel を起動します。最小の設定は以下のようになります。
+
+```
+port 5000
+sentinel monitor mymaster 127.0.0.1 6379 2
+sentinel down-after-milliseconds mymaster 5000
+sentinel failover-timeout mymaster 60000
+sentinel parallel-syncs mymaster 1
+```
+
+一番のポイントは `sentinel monitor mymaster 127.0.0.1 6379 2` の部分で、最後の 2 は quorum を表します。つまり、この場合だと 3 コの Sentinel のうち 2 コの Sentinel が master のダウンを検出したらフェイルオーバのプロセスが始まることになります。`down-after-milliseconds` の部分は、5 秒間 `PING` コマンドの応答がなければ master がダウンしたと判定するという設定です。
+
+同様に port を 5001 および 5002 に設定したファイルを作り、それぞれ `sentinel_alpha.conf`、`sentinel_beta.conf`、`sentinel_gamma.conf` のようなファイル名で保存し、以下のようにして 3 コの Sentinel を起動します。
+
+```
+$ redis-sentinel sentinel_alpha.conf
+$ redis-sentinel sentinel_beta.conf
+$ redis-sentinel sentinel_gamma.conf
+```
+
+Sentinel のログを観察すると、以下のように beta と gamma をディスカバリしていることがわかります。
+
+```
+[14:11:05]mozamimy@P861:test-sentinel (test-sentinel) (-'x'-).oO(
+(ins)> redis-sentinel sentinel_alpha.conf
+
+# :
+# : 中略
+# :
+
+89368:X 02 Nov 14:11:11.519 # Sentinel ID is 499d72ec25403cd130e564ad5db173a915ead877
+89368:X 02 Nov 14:11:11.519 # +monitor master mymaster 127.0.0.1 6379 quorum 2
+89368:X 02 Nov 14:11:11.521 * +slave slave 127.0.0.1:6380 127.0.0.1 6380 @ mymaster 127.0.0.1 6379
+89368:X 02 Nov 14:11:28.646 * +sentinel sentinel ec1ba6adead03f1a6ce73c29545290192fc4a519 127.0.0.1 5001 @ mymaster 127.0.0.1 6379
+89368:X 02 Nov 14:11:40.176 * +sentinel sentinel 0d06cbe31776185b622cfbd901e099523e4f753e 127.0.0.1 5002 @ mymaster 127.0.0.1 6379
+```
+
+ここでは、以下のように Sentinel ID が割り当てられました。
+
+- alpha(5000): 499d72ec25403cd130e564ad5db173a915ead877
+- beta(5001): ec1ba6adead03f1a6ce73c29545290192fc4a519
+- gamma(5002): 0d06cbe31776185b622cfbd901e099523e4f753e
+
+次に、検証用の Redis クライアントプログラムをサクッと書きます。今回は Rails から使うことを想定しているので、以下のように Ruby でサクッと書いてみました。
+
+```ruby
+require 'redis'
+require 'logger'
+require 'securerandom'
+
+INTERVAL = 0.3
+
+SENTINELS = [
+  { host: '127.0.0.1', port: 5000 },
+  { host: '127.0.0.1', port: 5001 },
+  { host: '127.0.0.1', port: 5002 },
+]
+
+redis = Redis.new(
+  url: 'redis://mymaster',
+  sentinels: SENTINELS,
+  role: :master,
+)
+
+logger = Logger.new(STDOUT)
+
+loop do
+  begin
+    key = SecureRandom.uuid
+
+    redis.set(key, "value: #{key}")
+    logger.info("Set: #{key}")
+    sleep 0.3
+  rescue => e
+    logger.error(e)
+  end
+end
+```
+
+
+Redis gem は Sentinel に対応しているため、Redis インスタンスを初期化するときに `sentinels` に Sentinel の情報を渡すことでフェイルオーバにより master が入れ替わったことを検知することができます。
+
+では、以下のようにしてこのスクリプトを動かしましょう。ここまでの設定がうまくいっていれば、以下のように無限に Redis に書き込みを行う様子が観測できるでしょう。
+
+```
+[14:35:12]mozamimy@P861:test-sentinel (test-sentinel) (-'x'-).oO(
+(cmd)> be ruby redis_test.rb
+I, [2017-11-02T14:35:27.158469 #90793]  INFO -- : Set: 17aadea4-fb75-4518-916c-b22fbfbbb00f
+I, [2017-11-02T14:35:27.460865 #90793]  INFO -- : Set: 2a193421-4ee7-4d43-8491-4c8886a0dfba
+I, [2017-11-02T14:35:27.765881 #90793]  INFO -- : Set: 89def42a-ae8f-45f6-bfaf-b2db90ec3834
+I, [2017-11-02T14:35:28.070549 #90793]  INFO -- : Set: 4fe43824-b17d-43f4-a5f0-5ba28c63609a
+```
+
+Sentinel に対して `SENTINEL` コマンドを `get-master-addr-by-name` オプションとともに発行することにより、現在の master を問い合わせることができます。
+
+```
+$ redis-cli -p 5000 sentinel get-master-addr-by-name mymaster
+1) "127.0.0.1"
+2) "6379"
+```
+
+では、実際に master を止めてフェイルオーバさせてみます。
+
+```
+$ redis-cli -p 6379 debug sleep 30
+```
+
+`DEBUG` コマンドを `sleep` オプションとともに使うことにより Redis サーバをスリープさせることができます。スリープすると `PING` コマンドにも反応しなくなるため、Sentinel からは死んだように見えます。
+
+すると、Sentinel (alpha) では以下のようなログが流れてフェイルオーバのプロセスが進みます。
+
+```
+89368:X 02 Nov 14:21:48.197 # +sdown master mymaster 127.0.0.1 6379
+89368:X 02 Nov 14:21:48.298 # +new-epoch 1
+89368:X 02 Nov 14:21:48.299 # +vote-for-leader ec1ba6adead03f1a6ce73c29545290192fc4a519 1
+89368:X 02 Nov 14:21:49.294 # +odown master mymaster 127.0.0.1 6379 #quorum 3/2
+89368:X 02 Nov 14:21:49.294 # Next failover delay: I will not start a failover before Thu Nov  2 14:23:48 2017
+89368:X 02 Nov 14:21:49.429 # +config-update-from sentinel ec1ba6adead03f1a6ce73c29545290192fc4a519 127.0.0.1 5001 @ mymaster 127.0.0.1 6379
+89368:X 02 Nov 14:21:49.429 # +switch-master mymaster 127.0.0.1 6379 127.0.0.1 6380
+```
+
+alpha は master のダウンを検知し、master のステータスを SDOWN としてマークしました。それと同時に `vote-for-leader` というログからもわかるように、リーダとして `ec1ba6adead03f1a6ce73c29545290192fc4a519`、つまり beta に投票しています。やがて quorum の充足数を満たし、master は ODOWN としてマークされます。
+
+ここでは beta がリーダーとして選ばれたので、beta が「オッ」と言いながらフェイルオーバを行います。
+
+```
+89371:X 02 Nov 14:21:48.238 # +sdown master mymaster 127.0.0.1 6379
+89371:X 02 Nov 14:21:48.294 # +odown master mymaster 127.0.0.1 6379 #quorum 3/2
+89371:X 02 Nov 14:21:48.294 # +new-epoch 1
+89371:X 02 Nov 14:21:48.294 # +try-failover master mymaster 127.0.0.1 6379
+89371:X 02 Nov 14:21:48.297 # +vote-for-leader ec1ba6adead03f1a6ce73c29545290192fc4a519 1
+89371:X 02 Nov 14:21:48.299 # 0d06cbe31776185b622cfbd901e099523e4f753e voted for ec1ba6adead03f1a6ce73c29545290192fc4a519 1
+89371:X 02 Nov 14:21:48.299 # 499d72ec25403cd130e564ad5db173a915ead877 voted for ec1ba6adead03f1a6ce73c29545290192fc4a519 1
+89371:X 02 Nov 14:21:48.350 # +elected-leader master mymaster 127.0.0.1 6379
+89371:X 02 Nov 14:21:48.350 # +failover-state-select-slave master mymaster 127.0.0.1 6379
+89371:X 02 Nov 14:21:48.427 # +selected-slave slave 127.0.0.1:6380 127.0.0.1 6380 @ mymaster 127.0.0.1 6379
+89371:X 02 Nov 14:21:48.427 * +failover-state-send-slaveof-noone slave 127.0.0.1:6380 127.0.0.1 6380 @ mymaster 127.0.0.1 6379
+89371:X 02 Nov 14:21:48.527 * +failover-state-wait-promotion slave 127.0.0.1:6380 127.0.0.1 6380 @ mymaster 127.0.0.1 6379
+89371:X 02 Nov 14:21:49.329 # +promoted-slave slave 127.0.0.1:6380 127.0.0.1 6380 @ mymaster 127.0.0.1 6379
+89371:X 02 Nov 14:21:49.329 # +failover-state-reconf-slaves master mymaster 127.0.0.1 6379
+89371:X 02 Nov 14:21:49.426 # +failover-end master mymaster 127.0.0.1 6379
+89371:X 02 Nov 14:21:49.426 # +switch-master mymaster 127.0.0.1 6379 127.0.0.1 6380
+```
+
+正常にフェイルオーバが行われると、以下のように 6380 で listen している Redis が master であると報告するようになります。
+
+```
+$ redis-cli -p 5000 sentinel get-master-addr-by-name mymaster
+1) "127.0.0.1"
+2) "6380"
+```
+
+検証用のスクリプトのログを見ると、約 20 秒で復帰していることがわかります。
+
+
+```
+# :
+$ : 中略
+# :
+
+I, [2017-11-02T14:37:18.586785 #90793]  INFO -- : Set: a161a0ff-129c-4f01-979c-63f68c043120
+I, [2017-11-02T14:37:18.892121 #90793]  INFO -- : Set: 3efe28e7-f4ae-4224-968e-1c5404dae0bb
+I, [2017-11-02T14:37:19.197081 #90793]  INFO -- : Set: 0a65a3e3-74bd-4af4-aba8-c99455638d99
+E, [2017-11-02T14:37:29.507734 #90793] ERROR -- : Connection timed out (Redis::TimeoutError)
+/Users/mozamimy/.rbenv/versions/2.4.1/lib/ruby/gems/2.4.0/gems/redis-4.0.1/lib/redis/connection/ruby.rb:71:in `rescue in _read_from_socket'
+/Users/mozamimy/.rbenv/versions/2.4.1/lib/ruby/gems/2.4.0/gems/redis-4.0.1/lib/redis/connection/ruby.rb:64:in `_read_from_socket'
+/Users/mozamimy/.rbenv/versions/2.4.1/lib/ruby/gems/2.4.0/gems/redis-4.0.1/lib/redis/connection/ruby.rb:56:in `gets'
+/Users/mozamimy/.rbenv/versions/2.4.1/lib/ruby/gems/2.4.0/gems/redis-4.0.1/lib/redis/connection/ruby.rb:360:in `read'
+/Users/mozamimy/.rbenv/versions/2.4.1/lib/ruby/gems/2.4.0/gems/redis-4.0.1/lib/redis/client.rb:260:in `block in read'
+/Users/mozamimy/.rbenv/versions/2.4.1/lib/ruby/gems/2.4.0/gems/redis-4.0.1/lib/redis/client.rb:248:in `io'
+/Users/mozamimy/.rbenv/versions/2.4.1/lib/ruby/gems/2.4.0/gems/redis-4.0.1/lib/redis/client.rb:259:in `read'
+/Users/mozamimy/.rbenv/versions/2.4.1/lib/ruby/gems/2.4.0/gems/redis-4.0.1/lib/redis/client.rb:118:in `block in call'
+/Users/mozamimy/.rbenv/versions/2.4.1/lib/ruby/gems/2.4.0/gems/redis-4.0.1/lib/redis/client.rb:229:in `block (2 levels) in process'
+/Users/mozamimy/.rbenv/versions/2.4.1/lib/ruby/gems/2.4.0/gems/redis-4.0.1/lib/redis/client.rb:366:in `ensure_connected'
+/Users/mozamimy/.rbenv/versions/2.4.1/lib/ruby/gems/2.4.0/gems/redis-4.0.1/lib/redis/client.rb:219:in `block in process'
+/Users/mozamimy/.rbenv/versions/2.4.1/lib/ruby/gems/2.4.0/gems/redis-4.0.1/lib/redis/client.rb:304:in `logging'
+/Users/mozamimy/.rbenv/versions/2.4.1/lib/ruby/gems/2.4.0/gems/redis-4.0.1/lib/redis/client.rb:218:in `process'
+/Users/mozamimy/.rbenv/versions/2.4.1/lib/ruby/gems/2.4.0/gems/redis-4.0.1/lib/redis/client.rb:118:in `call'
+/Users/mozamimy/.rbenv/versions/2.4.1/lib/ruby/gems/2.4.0/gems/redis-4.0.1/lib/redis/client.rb:524:in `check'
+/Users/mozamimy/.rbenv/versions/2.4.1/lib/ruby/gems/2.4.0/gems/redis-4.0.1/lib/redis/client.rb:103:in `block in connect'
+/Users/mozamimy/.rbenv/versions/2.4.1/lib/ruby/gems/2.4.0/gems/redis-4.0.1/lib/redis/client.rb:291:in `with_reconnect'
+/Users/mozamimy/.rbenv/versions/2.4.1/lib/ruby/gems/2.4.0/gems/redis-4.0.1/lib/redis/client.rb:98:in `connect'
+/Users/mozamimy/.rbenv/versions/2.4.1/lib/ruby/gems/2.4.0/gems/redis-4.0.1/lib/redis/client.rb:363:in `ensure_connected'
+/Users/mozamimy/.rbenv/versions/2.4.1/lib/ruby/gems/2.4.0/gems/redis-4.0.1/lib/redis/client.rb:219:in `block in process'
+/Users/mozamimy/.rbenv/versions/2.4.1/lib/ruby/gems/2.4.0/gems/redis-4.0.1/lib/redis/client.rb:304:in `logging'
+/Users/mozamimy/.rbenv/versions/2.4.1/lib/ruby/gems/2.4.0/gems/redis-4.0.1/lib/redis/client.rb:218:in `process'
+/Users/mozamimy/.rbenv/versions/2.4.1/lib/ruby/gems/2.4.0/gems/redis-4.0.1/lib/redis/client.rb:118:in `call'
+/Users/mozamimy/.rbenv/versions/2.4.1/lib/ruby/gems/2.4.0/gems/redis-4.0.1/lib/redis.rb:783:in `block in set'
+/Users/mozamimy/.rbenv/versions/2.4.1/lib/ruby/gems/2.4.0/gems/redis-4.0.1/lib/redis.rb:45:in `block in synchronize'
+/Users/mozamimy/.rbenv/versions/2.4.1/lib/ruby/2.4.0/monitor.rb:214:in `mon_synchronize'
+/Users/mozamimy/.rbenv/versions/2.4.1/lib/ruby/gems/2.4.0/gems/redis-4.0.1/lib/redis.rb:45:in `synchronize'
+/Users/mozamimy/.rbenv/versions/2.4.1/lib/ruby/gems/2.4.0/gems/redis-4.0.1/lib/redis.rb:779:in `set'
+redis_test.rb:25:in `block in <main>'
+redis_test.rb:21:in `loop'
+redis_test.rb:21:in `<main>'
+E, [2017-11-02T14:37:39.515995 #90793] ERROR -- : Connection timed out (Redis::TimeoutError)
+/Users/mozamimy/.rbenv/versions/2.4.1/lib/ruby/gems/2.4.0/gems/redis-4.0.1/lib/redis/connection/ruby.rb:71:in `rescue in _read_from_socket'
+/Users/mozamimy/.rbenv/versions/2.4.1/lib/ruby/gems/2.4.0/gems/redis-4.0.1/lib/redis/connection/ruby.rb:64:in `_read_from_socket'
+/Users/mozamimy/.rbenv/versions/2.4.1/lib/ruby/gems/2.4.0/gems/redis-4.0.1/lib/redis/connection/ruby.rb:56:in `gets'
+/Users/mozamimy/.rbenv/versions/2.4.1/lib/ruby/gems/2.4.0/gems/redis-4.0.1/lib/redis/connection/ruby.rb:360:in `read'
+/Users/mozamimy/.rbenv/versions/2.4.1/lib/ruby/gems/2.4.0/gems/redis-4.0.1/lib/redis/client.rb:260:in `block in read'
+/Users/mozamimy/.rbenv/versions/2.4.1/lib/ruby/gems/2.4.0/gems/redis-4.0.1/lib/redis/client.rb:248:in `io'
+/Users/mozamimy/.rbenv/versions/2.4.1/lib/ruby/gems/2.4.0/gems/redis-4.0.1/lib/redis/client.rb:259:in `read'
+/Users/mozamimy/.rbenv/versions/2.4.1/lib/ruby/gems/2.4.0/gems/redis-4.0.1/lib/redis/client.rb:118:in `block in call'
+/Users/mozamimy/.rbenv/versions/2.4.1/lib/ruby/gems/2.4.0/gems/redis-4.0.1/lib/redis/client.rb:229:in `block (2 levels) in process'
+/Users/mozamimy/.rbenv/versions/2.4.1/lib/ruby/gems/2.4.0/gems/redis-4.0.1/lib/redis/client.rb:366:in `ensure_connected'
+/Users/mozamimy/.rbenv/versions/2.4.1/lib/ruby/gems/2.4.0/gems/redis-4.0.1/lib/redis/client.rb:219:in `block in process'
+/Users/mozamimy/.rbenv/versions/2.4.1/lib/ruby/gems/2.4.0/gems/redis-4.0.1/lib/redis/client.rb:304:in `logging'
+/Users/mozamimy/.rbenv/versions/2.4.1/lib/ruby/gems/2.4.0/gems/redis-4.0.1/lib/redis/client.rb:218:in `process'
+/Users/mozamimy/.rbenv/versions/2.4.1/lib/ruby/gems/2.4.0/gems/redis-4.0.1/lib/redis/client.rb:118:in `call'
+/Users/mozamimy/.rbenv/versions/2.4.1/lib/ruby/gems/2.4.0/gems/redis-4.0.1/lib/redis/client.rb:524:in `check'
+/Users/mozamimy/.rbenv/versions/2.4.1/lib/ruby/gems/2.4.0/gems/redis-4.0.1/lib/redis/client.rb:103:in `block in connect'
+/Users/mozamimy/.rbenv/versions/2.4.1/lib/ruby/gems/2.4.0/gems/redis-4.0.1/lib/redis/client.rb:291:in `with_reconnect'
+/Users/mozamimy/.rbenv/versions/2.4.1/lib/ruby/gems/2.4.0/gems/redis-4.0.1/lib/redis/client.rb:98:in `connect'
+/Users/mozamimy/.rbenv/versions/2.4.1/lib/ruby/gems/2.4.0/gems/redis-4.0.1/lib/redis/client.rb:363:in `ensure_connected'
+/Users/mozamimy/.rbenv/versions/2.4.1/lib/ruby/gems/2.4.0/gems/redis-4.0.1/lib/redis/client.rb:219:in `block in process'
+/Users/mozamimy/.rbenv/versions/2.4.1/lib/ruby/gems/2.4.0/gems/redis-4.0.1/lib/redis/client.rb:304:in `logging'
+/Users/mozamimy/.rbenv/versions/2.4.1/lib/ruby/gems/2.4.0/gems/redis-4.0.1/lib/redis/client.rb:218:in `process'
+/Users/mozamimy/.rbenv/versions/2.4.1/lib/ruby/gems/2.4.0/gems/redis-4.0.1/lib/redis/client.rb:118:in `call'
+/Users/mozamimy/.rbenv/versions/2.4.1/lib/ruby/gems/2.4.0/gems/redis-4.0.1/lib/redis.rb:783:in `block in set'
+/Users/mozamimy/.rbenv/versions/2.4.1/lib/ruby/gems/2.4.0/gems/redis-4.0.1/lib/redis.rb:45:in `block in synchronize'
+/Users/mozamimy/.rbenv/versions/2.4.1/lib/ruby/2.4.0/monitor.rb:214:in `mon_synchronize'
+/Users/mozamimy/.rbenv/versions/2.4.1/lib/ruby/gems/2.4.0/gems/redis-4.0.1/lib/redis.rb:45:in `synchronize'
+/Users/mozamimy/.rbenv/versions/2.4.1/lib/ruby/gems/2.4.0/gems/redis-4.0.1/lib/redis.rb:779:in `set'
+redis_test.rb:25:in `block in <main>'
+redis_test.rb:21:in `loop'
+redis_test.rb:21:in `<main>'
+I, [2017-11-02T14:37:49.497914 #90793]  INFO -- : Set: 6369049b-c3c6-44ed-ac48-b90064512797
+I, [2017-11-02T14:37:49.803051 #90793]  INFO -- : Set: aa34666a-b3de-40a1-bc9c-4cae96b8002b
+I, [2017-11-02T14:37:50.106556 #90793]  INFO -- : Set: 6b2ddd15-1668-4012-87cf-fbcabc26d570
+
+# :
+# : 中略
+# :
+```
+
+また、6379 の Redis に sleep を入れてから 30 秒たつと Sentinel は 6379 の Redis の回復を検知して、6380 の slave として 6379 をぶら下げます。
+
+ここまで見てきたように、クライアントが Redis Sentinel に対応していれば、お手軽に Redis を HA 構成にできるのですごく便利そうです。
+
+### Sentinel は状態を設定ファイルに持つ
+
+とても便利そうな Sentinel ですが、イマイチポイントもあります。たとえば、Sentinel は状態を設定ファイル内に持つため、時々で設定ファイルをゴリゴリに書き換えます。つまり、Itamae のようなプロビジョニングツールと非常に相性が悪いのです。以下は、何回かフェイルオーバさせたあとの `sentinel_alpha.conf` の様子です。設定をバージョンニングするための `config-epoch` や `leader-epoch` のような値が書き込まれていたりするのがわかります。
+
+```
+port 5000
+sentinel myid 499d72ec25403cd130e564ad5db173a915ead877
+sentinel monitor mymaster 127.0.0.1 6379 2
+sentinel down-after-milliseconds mymaster 5000
+sentinel failover-timeout mymaster 60000
+# Generated by CONFIG REWRITE
+dir "/Users/mozamimy/var/repo/ckpd/zatsu-scripts/infra/test-sentinel"
+sentinel config-epoch mymaster 2
+sentinel leader-epoch mymaster 3
+sentinel known-slave mymaster 127.0.0.1 6380
+sentinel known-sentinel mymaster 127.0.0.1 5002 0d06cbe31776185b622cfbd901e099523e4f753e
+sentinel known-sentinel mymaster 127.0.0.1 5001 ec1ba6adead03f1a6ce73c29545290192fc4a519
+sentinel current-epoch 3
+```
+
+一般的に、分散システムでは状態は設定ファイルとは別に持ちますが、何を思ったのか Sentinel ではそうなっていないようです。そのため、設定ファイルは設定ではなく状態として割り切って扱い、Itamae の管理対象から外すようにしないといけなさそうです。
+
+## まとめ
+
+Redis サーバの以降の話から、ElasiCache Redis と Redis Sentinel でちまちま検証した結果を書いてきました。その結果、EC2 で Redis を HA 構成にするならば、Redis Sentinel は筋が良さそうだという感触を得ることができました。ここで得た知見が参考になれば幸いです。
