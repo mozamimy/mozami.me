@@ -74,8 +74,13 @@ body
         width: 100%
 
       display: table-cell
-      width: 70%
       padding-right: 25px
+
+      div.main
+        max-width: 1024px
+        min-width: 640px
+        @media screen and (max-width: 480px)
+          width: 100%
 
       article
         margin-bottom: 20px
@@ -111,9 +116,13 @@ body
         padding: 50px 0 0 0
 
       display: table-cell
-      width: 30%
       padding-left: 25px
       border-left: 2px dashed $pink
+
+      section
+        width: 320px
+        @media screen and (max-width: 480px)
+          width: 100%
 
       h2
         &:before
