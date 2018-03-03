@@ -27,7 +27,7 @@ defaults
   retries 2
 
 resolvers dns
-  nameserver dns1 172.64.64.2:53
+  nameserver dns1 172.20.64.2:53
 
 listen test
   bind :80
@@ -82,9 +82,9 @@ services:
       dockerfile: 'Dockerfile.dnsmasq'
     networks:
       haproxy_net:
-        ipv4_address: '172.64.64.2'
+        ipv4_address: '172.20.64.2'
     extra_hosts:
-      - 'upstream:172.64.64.3'
+      - 'upstream:172.20.64.3'
     cap_add:
       - 'NET_ADMIN'
 
@@ -96,8 +96,8 @@ services:
         TEXT: 'egg.txt'
     networks:
       haproxy_net:
-        ipv4_address: '172.64.64.3'
-    dns: '172.64.64.2'
+        ipv4_address: '172.20.64.3'
+    dns: '172.20.64.2'
   nginx2:
     build:
       context: '.'
@@ -106,8 +106,8 @@ services:
         TEXT: 'chick.txt'
     networks:
       haproxy_net:
-        ipv4_address: '172.64.64.4'
-    dns: '172.64.64.2'
+        ipv4_address: '172.20.64.4'
+    dns: '172.20.64.2'
 
   haproxy_16:
     build:
@@ -121,8 +121,8 @@ services:
       - 'nginx2'
     networks:
       haproxy_net:
-        ipv4_address: '172.64.64.5'
-    dns: '172.64.64.2'
+        ipv4_address: '172.20.64.5'
+    dns: '172.20.64.2'
     command: ['haproxy', '-f', '/usr/local/etc/haproxy/haproxy.cfg']
   haproxy_17:
     build:
@@ -136,8 +136,8 @@ services:
       - 'nginx2'
     networks:
       haproxy_net:
-        ipv4_address: '172.64.64.6'
-    dns: '172.64.64.2'
+        ipv4_address: '172.20.64.6'
+    dns: '172.20.64.2'
     command: ['haproxy', '-f', '/usr/local/etc/haproxy/haproxy.cfg']
   haproxy_18:
     build:
@@ -151,8 +151,8 @@ services:
       - 'nginx2'
     networks:
       haproxy_net:
-        ipv4_address: '172.64.64.7'
-    dns: '172.64.64.2'
+        ipv4_address: '172.20.64.7'
+    dns: '172.20.64.2'
     command: ['haproxy', '-f', '/usr/local/etc/haproxy/haproxy.cfg']
 
 networks:
@@ -160,7 +160,7 @@ networks:
     driver: 'bridge'
     ipam:
       config:
-        - subnet: '172.64.64.0/24'
+        - subnet: '172.20.64.0/24'
 ```
 
 Dockefile.dnsmasq が Dnsmasq のための Docker イメージです。ベースとして [andyshinn/dnsmasq - Docker Hub](https://hub.docker.com/r/andyshinn/dnsmasq/) を利用し、雑に `/etc/hosts` を書き換えるために Vim をインストールします。
@@ -222,7 +222,7 @@ done
 1.6: 🥚, 1.7: 🥚, 1.8: 🥚
 ```
 
-ここで、おもむろに `upstream` が返す IP アドレスを 172.64.64.3 から 172.64.64.4 に切り替えてみましょう。/etc/hosts 中の `172.64.64.3 upstream` を `172.64.64.4 upstream` に書き換え、`SIGHUP` シグナルを dnsmasq に送って設定をリロードします。
+ここで、おもむろに `upstream` が返す IP アドレスを 172.20.64.3 から 172.20.64.4 に切り替えてみましょう。/etc/hosts 中の `172.20.64.3 upstream` を `172.20.64.4 upstream` に書き換え、`SIGHUP` シグナルを dnsmasq に送って設定をリロードします。
 
 ```
 [19:03:15]mozamimy@P1323-18P13U:haproxy_dns_test (master) (-'x'-).oO(
@@ -260,7 +260,7 @@ done
 ```
 [19:08:54]mozamimy@P1323-18P13U:haproxy_dns_test (master) (-'x'-).oO(
 (ins)> docker exec -t #{ここに 1.6 か 1.7 のコンテナ ID を入れる} ngrep -W byline -q port 53
-interface: eth0 (172.64.64.0/255.255.255.0)
+interface: eth0 (172.20.64.0/255.255.255.0)
 filter: (ip or ip6) and ( port 53 )
 
 以降何も出力されない
@@ -271,19 +271,19 @@ filter: (ip or ip6) and ( port 53 )
 ```
 [19:12:49]mozamimy@P1323-18P13U:haproxy_dns_test (master) (-'x'-).oO(
 (ins)> docker exec -t e6dabcdc846c ngrep -W byline -q port 53
-interface: eth0 (172.64.64.0/255.255.255.0)
+interface: eth0 (172.20.64.0/255.255.255.0)
 filter: (ip or ip6) and ( port 53 )
 
-U 172.64.64.7:35668 -> 172.64.64.2:53
+U 172.20.64.7:35668 -> 172.20.64.2:53
 .............upstream.......)........
 
-U 172.64.64.2:53 -> 172.64.64.7:35668
+U 172.20.64.2:53 -> 172.20.64.7:35668
 .............upstream.....
 
-U 172.64.64.7:35668 -> 172.64.64.2:53
+U 172.20.64.7:35668 -> 172.20.64.2:53
 .............upstream.......)........
 
-U 172.64.64.2:53 -> 172.64.64.7:35668
+U 172.20.64.2:53 -> 172.20.64.7:35668
 .............upstream..................@@...)........
 ```
 
