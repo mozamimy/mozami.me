@@ -1,7 +1,7 @@
 ---
 title: SRE book から学んだことと、献身と愛情、2018 年の行動指針について
 date: 2018-01-14
-tags: infra, 雑記
+tags: infra, book
 ---
 
 ## :book: SRE book を読んだ
