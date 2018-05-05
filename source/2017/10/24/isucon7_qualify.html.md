@@ -1,7 +1,7 @@
 ---
 title: ISUCON 7 の予選を突破した (†空中庭園†《ガーデンプレイス》)
 date: 2017-10-24
-tags: 雑記
+tags: memo
 ---
 
 今年も大盛り上がりな [ISUCON 7](http://isucon.net/archives/50949022.html) でしたが、わたしも†空中庭園†《ガーデンプレイス》というチームで、同僚の [@ryot\_a\_rai](https://twitter.com/ryot_a_rai) さんと [@eagletmt](https://twitter.com/eagletmt) さんと一緒に予選 (2 日目) に出場しました。

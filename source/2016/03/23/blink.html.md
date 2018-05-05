@@ -1,7 +1,7 @@
 ---
 title: 懐かしの blink タグを復活させる Firefox アドオン
 date: 2016-03-23
-tags: html, javascript
+tags: web, tool
 ---
 
 <img src='/2016/03/23/blink/blink.gif' style='width: 600px;'>

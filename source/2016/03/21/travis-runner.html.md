@@ -1,7 +1,7 @@
 ---
 title: Travis CI の docker image をローカルでビョーンとしてみました
 date: 2016-03-21
-tags: infra
+tags: infra, docker
 ---
 
 ![Docker](/2016/03/21/travis-runner/docker.png)  

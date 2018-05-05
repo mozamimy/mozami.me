@@ -1,7 +1,7 @@
 ---
 title: DeNA 社の StuDev 2015 に参加しました
 date: 2015-09-05
-tags: 雑記
+tags: memo
 ---
 
 ## はじめに

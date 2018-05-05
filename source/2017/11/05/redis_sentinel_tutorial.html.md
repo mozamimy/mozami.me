@@ -1,7 +1,7 @@
 ---
 title: Redis の無停止マイグレーションと ElastiCache そして Redis Sentinel
 date: 2017-11-05
-tags: infra
+tags: infra, AWS
 ---
 
 やんごとなき事情により、CentOS 6 が動く古いサーバをつぶしていくというようなことを普段やっていて、Cent OS 6 上で動く Redis をどのように移行しようか、ということを最近考える機会があったので、このエントリにメモしておきます。

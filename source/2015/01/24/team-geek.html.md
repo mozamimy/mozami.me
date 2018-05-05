@@ -1,7 +1,7 @@
 ---
 title: Team Geek を読みました
 date: 2015-01-24
-tags: 雑記
+tags: book
 ---
 
 ![](/2015/01/24/team-geek/tg.jpg)

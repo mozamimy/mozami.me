@@ -1,7 +1,7 @@
 ---
 title: Cerebro の実用的な Docker image を作った (Elasticsearch 管理のおともに)
 date: 2017-03-12
-tags: infra, docker, elasticsearch
+tags: infra, docker, tool
 ---
 
 ## Cerebro とは

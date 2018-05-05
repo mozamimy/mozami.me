@@ -1,7 +1,7 @@
 ---
 title: mozami.me を HTTPS 化して CI でデプロイできるようにした
 date: 2016-11-27
-tagls: 雑記, infra
+tagls: note, infra, web
 ---
 
 ずっとやろうと思いつつ、なんとなくだるくてやってなかった mozami.me の HTTPS 化をしました。

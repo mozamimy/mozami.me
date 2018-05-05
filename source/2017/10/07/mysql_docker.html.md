@@ -1,7 +1,7 @@
 ---
 title: Docker で唐突に MySQL 8.0 を試したくなったときにシュッと環境を用意するメモ
 date: 2017-10-07
-tags: mysql, infra
+tags: infra, docker
 ---
 
 MySQL の運用をしていると、唐突に MySQL 8.0 を触りたくなる瞬間があると思います。

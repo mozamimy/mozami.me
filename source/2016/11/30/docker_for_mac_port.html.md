@@ -1,7 +1,7 @@
 ---
 title: Docker for Mac でホストの特定のポートにつなぐ方法
 date: 2016-11-30
-tagls: OS X, infra
+tagls: infra, docker
 ---
 
 [Docker for Mac](https://www.docker.com/products/docker#/mac)、安定してふつうに動くのですが、Linux 用のものとは違って docker0 のような仮想のネットワークアダプタが生えないために、ホスト OS の特定のポートにコンテナからつなぐ、というようなことが直感的にできません。
