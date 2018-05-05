@@ -1,7 +1,7 @@
 ---
 title: Node.js と AWS (S3・Lambda・SES）を使って CLI アップローダを作ってみた
 date: 2016-07-16
-tags: infra, javascript
+tags: infra, AWS, tool
 ---
 
 ![Architecture](/2016/07/16/lambbit/lambbit_architecture.png)

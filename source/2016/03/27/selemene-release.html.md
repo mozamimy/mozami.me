@@ -1,7 +1,7 @@
 ---
 title: LGTM 用の gif 画像をパッと探してポッと貼れるアプリを Electron で作ってみました
 date: 2016-03-27
-tags: html, javascript
+tags: web, tool
 ---
 
 <img src='/2016/03/27/selemene-release/selemene.gif' style='width: 400px;'>

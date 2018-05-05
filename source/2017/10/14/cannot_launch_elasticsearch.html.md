@@ -1,7 +1,7 @@
 ---
 title: max virtual memory areas vm.max_map_count [65530] is too low. で Elasticsearch が起動しないとき
 date: 2017-10-14
-tags: infra, elasticsearch
+tags: infra
 ---
 
 Elasticsearch の起動時に、以下のようなログが出て起動できない場合があります。以下の例では、docker-compose を用いて Elasticsearch 5.5.2 を起動しています。

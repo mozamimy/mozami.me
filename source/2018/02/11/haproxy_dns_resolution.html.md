@@ -1,7 +1,7 @@
 ---
 title: HAProxy 1.6 と 1.7 ではヘルスチェックを設定しないと名前解決が走らない
 date: 2018-02-11
-tags: infra, docker, haproxy
+tags: infra, docker
 ---
 
 先日、会社の技術ブログで AWS Lambda を中心としたサーバーレスアーキテクチャーの記事を書いたのですが、思いのほか好評でびっくりしている [@mozamimy](https://twitter.com/mozamimy) です。

@@ -1,7 +1,7 @@
 ---
 title: API と著作権
 date: 2015-07-01
-tags: 雑記
+tags: memo
 ---
 
 

@@ -1,7 +1,7 @@
 ---
 title: fixup! なコミットを含む pull request で merge ボタンを押せなくするブラウザ拡張を作った
 date: 2018-02-18
-tags: javascript, tools
+tags: web, tool
 ---
 
 GitHub および GitHub Enterprise (以下 GHE と表記) で `fixup!` なコミットを含む pull request で merge ボタンを押せなくするブラウザ拡張 **autosquash-please** を作りました。Firefox と Chrome で動きます。具体的な動作イメージは以下のスクリーンショットを見てください。

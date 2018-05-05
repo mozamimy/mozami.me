@@ -1,7 +1,7 @@
 ---
 title: いまさら「リーダブルコード」
 date: 2016-04-07
-tags: 雑記
+tags: book
 ---
 
 <img src="/2016/04/07/read_books/cover.jpg" style="width: 200px;">

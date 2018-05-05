@@ -1,7 +1,7 @@
 ---
 title: LGTM 用 gif アニメをシュッと探せる Selemene 0.2.0 をリリースしました
 date: 2016-04-27
-tags: html, javascript
+tags: web, tool
 ---
 
 [LGTM 用の gif 画像をパッと探してポッと貼れるアプリを Electron で作ってみました](/2016/03/27/selemene-release.html) で紹介した Selemene をアップデートしました。

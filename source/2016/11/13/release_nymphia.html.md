@@ -1,7 +1,7 @@
 ---
 title: SSH config を構造的に書くための Ruby の DSL Nymphia の紹介
 date: 2016-11-13
-tags: infra, ruby
+tags: infra, ruby, tool
 ---
 
 たくさんのサーバを日々扱うエンジニアにとって、SSH config をキレイに保つことは大切です。

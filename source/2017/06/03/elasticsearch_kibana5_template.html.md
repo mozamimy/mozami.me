@@ -1,7 +1,7 @@
 ---
 title: Elasticsearch 5.x & Kibana 5 に移行したときになぜか棒が分割できない問題に対処したメモ
 date: 2017-06-03
-tags: elasticsearch, infra
+tags: infra
 ---
 
 古いバージョンの EC2 上で動く Elasticsearch と Kibana を AWS Elasticsearch Service (5.1) & Kibana 5 に移行するときに、ちょっとハマったポイントがあったのでメモとして残しておきます。

@@ -1,7 +1,7 @@
 ---
 title: 書籍 ElasticSearch Server と Elasticsearch 5.2
 date: 2017-03-18
-tags: infra
+tags: infra, book
 ---
 
 業務で Elasticsearch をやっていくことになったので、一通りわかっておきたいと思って、いわゆる「緑の本」を買って読みました。

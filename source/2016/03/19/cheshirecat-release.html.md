@@ -1,7 +1,7 @@
 ---
 title: ウサギの需要を満たす middleman 向けデプロイツール cheshirecat
 date: 2016-03-19
-tags: ruby
+tags: ruby, web, tool
 ---
 
 ## TL; DR

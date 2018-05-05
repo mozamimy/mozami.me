@@ -1,7 +1,7 @@
 ---
 title: ブログをリニューアルしました
 date: 2016-03-13
-tags: 雑記
+tags: memo
 ---
 
 ## TL; DR

@@ -1,7 +1,7 @@
 ---
 title: インターネットルーティング入門 第 3 版を読んだ
 date: 2018-05-04
-tags: book
+tags: book, infra
 ---
 
 この本です。

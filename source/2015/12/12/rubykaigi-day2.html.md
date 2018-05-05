@@ -1,7 +1,7 @@
 ---
 title: RubyKaigi 2015 Day2
 date: 2015-12-12
-tags: ruby, ruby on rails
+tags: ruby
 ---
 
 <img src="/2015/12/12/rubykaigi-day2/sushi.png" style="width: 250px;">
