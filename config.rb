@@ -19,6 +19,8 @@ page '/*.txt', layout: false
 ###
 # Helpers
 ###
+require 'lib/article_helpers'
+helpers ArticleHelpers
 
 activate :blog do |blog|
   # This will add a prefix to all links, template references and source paths
@@ -84,3 +86,4 @@ activate :somemoji, provider: 'twemoji', emojis_dir: '/images/emoji'
 Time.zone = 'Tokyo'
 
 set :fonts_dir, 'fonts'
+set :endpoint, 'https://mozami.me/'
