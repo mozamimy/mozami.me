@@ -3,6 +3,12 @@ html lang='ja'
   head
     = partial 'partials/head'
 
+    meta property='og:type' content='article'
+    meta property='og:title' content="#{current_article&.title}"
+    meta property='og:description' content="#{first_paragraph_text(current_article)}"
+    meta property='og:url' content="#{href(current_article)}"
+    meta property='og:image' content="#{first_img_href(current_article)}"
+
     - additional =  current_article.present? ? current_article.title : ''
     title = "#{additional} | Cry for the Moon"
 
