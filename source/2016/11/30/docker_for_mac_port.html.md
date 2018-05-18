@@ -4,6 +4,16 @@ date: 2016-11-30
 tagls: infra, docker
 ---
 
+## 2018-05-20 追記
+
+**18.03 から `host.docker.internal` もしくは `gateway.docker.internal` という特殊な DNS 名を使うことでコンテナからホストマシンに刺さるようになっています。**
+
+[Docker for Mac でホストの特定のポートにつなぐ方法 (18.03 からのよりよい方法)](/2018/05/20/docker_for_mac_host_dns_name.html)
+
+**なので以下の文章は古いです。**
+
+<hr>
+
 [Docker for Mac](https://www.docker.com/products/docker#/mac)、安定してふつうに動くのですが、Linux 用のものとは違って docker0 のような仮想のネットワークアダプタが生えないために、ホスト OS の特定のポートにコンテナからつなぐ、というようなことが直感的にできません。
 
 業務上、AWS の VPC 上にあるサーバの特定のポートに到達できるように SSH トンネルを刺して、ホスト OS に生やしたポートからアクセスできるようにして、コンテナからつなぎにいきたいことがまれによくあるので、これではこまります 🐰 💦
