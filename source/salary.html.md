@@ -1,5 +1,9 @@
-| Year | Base (JPY) | Bonus (JPY) |
-|------|------------|-------------|
-| 2016 | 4,500,000  |             |
-| 2017 | 5,184,000  |             |
-| 2018 | 5,808,000  | 500,000     |
+<img src="/images/molang.gif" style="width: 400px;">
+
+<h1 style="text-align: center;">
+˚ᆺ˚
+</h1>
+
+<div style="text-align: center;">
+  <a href="https://www.youtube.com/user/MolangOfficial">Molang - YouTube</a>
+</div>
