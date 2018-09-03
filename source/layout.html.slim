@@ -14,4 +14,5 @@ html lang='ja'
       #main role='main'
         = yield
 
-      = partial 'partials/menu_column', locals: { blog: blog }
+      - if current_page.path != 'salary.html'
+        = partial 'partials/menu_column', locals: { blog: blog }
