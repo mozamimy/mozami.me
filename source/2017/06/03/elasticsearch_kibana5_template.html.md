@@ -114,4 +114,4 @@ sql.keyword の `ignore_above: 256` がミソです。実は、Elasticsearch 5.x
 }
 ```
 
-こうすると、全てのインデックスにおいて、文字列の keyword フィールドの `ignore_above` のデフォルト値が 2048 になり、長い文字列でも aggregate することができるようになります :tada: :rabbit: :+1:
+こうすると、全てのインデックスにおいて、文字列の keyword フィールドの `ignore_above` のデフォルト値が 2048 になり、長い文字列でも aggregate することができるようになります 🎉🐰👍

@@ -35,7 +35,6 @@ GEM
     ffi (1.9.25)
     font-awesome-sass (5.3.1)
       sassc (>= 1.11)
-    gemoji (3.0.0)
     gh (0.15.1)
       addressable (~> 2.4.0)
       backports
@@ -101,9 +100,6 @@ GEM
       em-websocket (~> 0.5.1)
       middleman-core (>= 3.3)
       rack-livereload (~> 0.3.15)
-    middleman-somemoji (0.1.0)
-      middleman-core (>= 4)
-      somemoji
     middleman-syntax (3.0.0)
       middleman-core (>= 3.2)
       rouge (~> 2.0)
@@ -142,11 +138,6 @@ GEM
     slim (4.0.1)
       temple (>= 0.7.6, < 0.9)
       tilt (>= 2.0.6, < 2.1)
-    slop (4.6.2)
-    somemoji (0.7.1)
-      gemoji (= 3.0.0)
-      json
-      slop
     temple (0.8.0)
     thor (0.20.0)
     thread_safe (0.3.6)
@@ -177,7 +168,6 @@ DEPENDENCIES
   middleman
   middleman-blog
   middleman-livereload
-  middleman-somemoji
   middleman-syntax
   nokogiri
   rake

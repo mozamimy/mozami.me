@@ -81,7 +81,6 @@ slim_shortcut = {
 set :slim, format: :html, sort_attrs: false, pretty: true, shortcut: slim_shortcut
 
 activate :syntax
-activate :somemoji, provider: 'twemoji', emojis_dir: '/images/emoji'
 
 Time.zone = 'Tokyo'
 
