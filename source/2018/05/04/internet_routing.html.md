@@ -8,13 +8,13 @@ tags: book, infra
 
 <div class="amazlet-box" style="margin-bottom:0px;"><div class="amazlet-image" style="float:left;margin:0px 12px 1px 0px;"><a href="http://www.amazon.co.jp/exec/obidos/ASIN/4798134813" name="amazletlink" target="_blank"><img src="https://images-fe.ssl-images-amazon.com/images/I/51m7n6f4rbL._SL160_.jpg" alt="インターネットルーティング入門 第3版 (ネットワーキング入門)" style="border: none;" /></a></div><div class="amazlet-info" style="line-height:120%; margin-bottom: 10px"><div class="amazlet-name" style="margin-bottom:10px;line-height:120%"><a href="http://www.amazon.co.jp/exec/obidos/ASIN/4798134813" name="amazletlink" target="_blank">インターネットルーティング入門 第3版 (ネットワーキング入門)</a><div class="amazlet-powered-date" style="font-size:80%;margin-top:5px;line-height:120%">posted with <a href="http://www.amazlet.com/" title="amazlet" target="_blank">amazlet</a> at 18.05.05</div></div><div class="amazlet-detail">友近 剛史 池尻 雄一 白崎 泰弘 <br />翔泳社 <br />売り上げランキング: 146,269<br /></div><div class="amazlet-sub-info" style="float: left;"><div class="amazlet-link" style="margin-top: 5px"><a href="http://www.amazon.co.jp/exec/obidos/ASIN/4798134813" name="amazletlink" target="_blank">Amazon.co.jpで詳細を見る</a></div></div></div><div class="amazlet-footer" style="clear: left"></div></div>
 
-## :bulb: 読もうと思ったきっかけ
+## 💡 読もうと思ったきっかけ
 
 ふだんウェブサービスのインフラを触ることが多いのですが、もう少し下のレイヤ、つまり L2, L3 あたりの知識がふんわりとしていて、もっとキッチリと「わかり」たいと思ったのがきっかけです。
 
 また、今年は趣味のご家庭インフラの式年遷宮を計画していて、IX2105 のようなちゃんとしたルータを入手したので、拠点間 VPN などを仕込むことも考えており、ルーティングについて体系的に学ぶことが必ず役に立つだろうと考えたからです。
 
-## :book: 内容と所感
+## 📕 内容と所感
 
 ウェブサービスの開発や運用に携わっている人ならほぼ知っているであろうルーティングの仕組みの基礎から始まり、OSPF、RIP、BGP、MPLS といったプロトコルに関する説明に入り、最後は OpenFlow などの仮想ネットワークの概要について解説する、という流れになっていました。
 
@@ -22,7 +22,7 @@ tags: book, infra
 
 入門と銘打っているように、より複雑なネットワークを普段から触っているエキスパートにとっては基本的なトピックの解説にとどまっていそうです。しかし、エキスパートな人々が使う語彙を得ることができるため、そのような人々と会話したり質問したりするときに役立つ知識を得ることができました。
 
-## :computer: やってみた
+## 💻 やってみた
 
 良書ですが、読むだけではわかったつもりになりがちなので、実際に OSPF や RIP、BGP などをしゃべらせてみるのがいいと思います。実機がたくさんあれば最高ですが、そうでなければ [Packet Tracer](https://www.netacad.com/courses/packet-tracer) を使って練習するのが一番お手軽だと思います。
 
@@ -43,6 +43,6 @@ tags: book, infra
 
 とはいえ、実際に使うことが多いであろう、OSPF や RIP によるネットワークを構成することは十分可能です。ルータの電源を急に落としたり線を切ったりして、OSPF や RIP が期待通りに動くかどうかを試してみると、ますます理解が深まると思います。
 
-## :triumph: まとめ
+## 😤 まとめ
 
-ちゃんとしたルータを購入していろいろやってみたい、でも知識がふんわりしててもっと理解したい人にとって、必ず役に立つ良書だと感じました。ご家庭インフラをシュッとさせるために活用していこうと思います :rabbit: :sparkles:
+ちゃんとしたルータを購入していろいろやってみたい、でも知識がふんわりしててもっと理解したい人にとって、必ず役に立つ良書だと感じました。ご家庭インフラをシュッとさせるために活用していこうと思います 🐰✨

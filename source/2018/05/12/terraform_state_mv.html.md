@@ -4,7 +4,7 @@ date: 2018-05-12
 tags: infra
 ---
 
-## :open_file_folder: Terraform におけるファイル分割
+## 📂 Terraform におけるファイル分割
 
 codenize ツールとしてポピュラーな [Terraform](https://www.terraform.io/) をミニマルに使いはじめる場合、最初から細かくファイルを分割するのではなく、たとえば AWS のサービスごとにファイルを分け、1 ファイルに複数のリソースをまとめて書くことがあります。
 
@@ -16,7 +16,7 @@ codenize ツールとしてポピュラーな [Terraform](https://www.terraform.
 
 [Command: state mv - Terraform by HashiCorp](https://www.terraform.io/docs/commands/state/mv.html)
 
-## :dango: `state mv` を使ったリファクタリング例
+## 🍡 `state mv` を使ったリファクタリング例
 
 ここでは、以下のように `elasticache.tf` に定義されている 2 つの ElastiCache クラスタ (Redis) をモジュールに切り出し、`elasticache/foo.tf` と `elasticache/bar.tf` に分けることを考えます。
 
@@ -236,4 +236,4 @@ This means that Terraform did not detect any differences between your
 configuration and real physical resources that exist. As a result, no
 ```
 
-`state mv` は [公式ドキュメント](https://www.terraform.io/docs/commands/state/mv.html)にあるように、Terraform ファイルのリファクタリングに有用なので、どんどん利用していきましょう :muscle: :rabbit: :sparkles:
+`state mv` は [公式ドキュメント](https://www.terraform.io/docs/commands/state/mv.html)にあるように、Terraform ファイルのリファクタリングに有用なので、どんどん利用していきましょう 💪🐰✨
