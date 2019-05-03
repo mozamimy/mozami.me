@@ -16,6 +16,11 @@ jobs:
             apt-get -y update
             apt-get install -y awscli
       - run:
+          name: 'Build static files'
+          command: |
+            mkdir build/
+            salmon build $PWD
+      - run:
           name: 'Upload files to S3 bucket'
           command: |
             aws s3 sync build s3://mozami.me/ --delete
