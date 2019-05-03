@@ -23,4 +23,4 @@ jobs:
       - run:
           name: 'Upload files to S3 bucket'
           command: |
-            aws s3 sync build s3://mozami.me/ --delete --debug
+            aws s3 sync build s3://mozami.me/ --delete
