@@ -1,0 +1,19 @@
+{
+  "query": {
+    "bool": {
+      "should": [
+        {
+          "term": {
+            "tags": "novel"
+          }
+        },
+        {
+          "term": {
+            "tags": "book"
+          }
+        }
+      ],
+      "minimum_should_match": 1
+    }
+  }
+}

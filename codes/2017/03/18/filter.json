@@ -1,0 +1,19 @@
+{
+  "query": {
+    "bool": {
+      "must": {
+        "query_string": {
+          "fields": [
+            "title"
+          ],
+          "query": "Catch-22"
+        }
+      },
+      "filter": {
+        "term": {
+          "year": 1961
+        }
+      }
+    }
+  }
+}

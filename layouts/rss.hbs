@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Cry for the Moon</title>
+  <subtitle>I'm coding to bring us much happiness &lt;3</subtitle>
+  <id>http://mozami.me/</id>
+  <link href="http://mozami.me/"/>
+  <link href="http://mozami.me/feed.xml" rel="self"/>
+  <updated>{{ convert_to_iso8601 articles.[0].date }}</updated>
+  <author>
+    <name>@mozamimy</name>
+  </author>
+  {{#each articles as |article|}}
+  <entry>
+    <title>{{ article.title }}</title>
+    <link rel="alternate" href="http://mozami.me{{ article.path }}"/>
+    <id>http://mozami.me{{ article.path }}</id>
+    <published>{{ convert_to_iso8601 article.date }}</published>
+    <updated>{{ time_now dummy }}</updated>
+    <author>
+      <name>@mozamimy</name>
+    </author>
+    <summary type="html">
+      {{ summarize_article article true }}
+    </summary>
+  </entry>
+  {{/each}}
+</feed>

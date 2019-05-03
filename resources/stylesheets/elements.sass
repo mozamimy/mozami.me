@@ -1,0 +1,114 @@
+@import 'variables.sass'
+
+@media screen and (max-width: 480px)
+  #content_wrapper
+    img
+      width: 100% !important
+
+h1
+  font-weight: 600
+  font-size: 200%
+  margin: 0 0 15px 0
+  line-height: 150%
+
+  a
+    color: $brown !important
+    font-weight: 600
+    text-decoration: none
+
+    &:hover
+      background-color: $yellow
+
+h2
+  font-weight: 600
+  font-size: 150%
+  margin-bottom: 10px
+
+h3
+  font-weight: 600
+  font-size: 120%
+  margin-bottom: 10px
+
+h4
+  font-weight: 600
+  font-size: 100%
+  margin-bottom: 10px
+
+section
+  margin: 0 0 40px 0
+
+p
+  line-height: 180%
+  margin: 10px 0
+  text-align: justify
+  text-justify: inter-ideograph
+  word-break: normal
+
+.elements_list
+  list-style-type: none
+
+  li
+    border-bottom: 1px solid $light_pink
+    padding: 10px 0 10px 0
+
+    &:hover
+      background-color: $yellow
+
+    a
+      text-decoration: none
+
+      &:hover
+        color: $pink
+
+      date
+        color: $brown
+        display: block
+        font-size: 80%
+
+      div
+        line-height: 160%
+
+div.highlight
+  max-width: 768px
+  min-width: 320px
+
+pre
+  padding: 15px
+  margin:
+    top: 15px
+    bottom: 15px
+  border-radius: 10px
+  background-color: $solarized_background
+  overflow: scroll
+  font-family: monospace, serif
+
+strong
+  font-weight: 600
+
+table
+  border-collapse: collapse
+
+  td, th
+    border: 2px $light_pink solid
+    padding: 5px
+
+  th
+    font-weight: bold
+
+.amazlet-box
+  margin:
+    top: 20px
+    bottom: 20px
+  padding: 10px
+  background-color: $yellow
+  border: 2px solid $brown
+  border-radius: 10px
+
+img.emoji
+  width: 12pt
+
+hr
+  border-top: 3px solid $brown
+  border-bottom: none
+  border-left: none
+  border-right: none

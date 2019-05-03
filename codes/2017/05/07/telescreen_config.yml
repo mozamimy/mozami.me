@@ -1,0 +1,6 @@
+- match: 'personal-.+'
+  destinations:
+    - personal-timeline
+- match: '.*'
+  destinations:
+    - public-timeline

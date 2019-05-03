@@ -1,0 +1,27 @@
+{
+  "order": 0,
+  "template": "*",
+  "settings": {},
+  "mappings": {
+    "_default_": {
+      "dynamic_templates": [
+        {
+          "rule1": {
+            "mapping": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "ignore_above": 2048,
+                  "type": "keyword"
+                }
+              }
+            },
+            "match_mapping_type": "string",
+            "match": "*"
+          }
+        }
+      ]
+    }
+  },
+  "aliases": {}
+}

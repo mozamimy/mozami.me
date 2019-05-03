@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    {{> head }}
+    <meta name="description" content="SRE という肩書きで、ウェブアプリケーションを動かすためのインフラや基盤技術、コスト最適化やそれを可能にする組織づくりに興味があります。">
+    <title>{{ year_num }} 年の記事一覧 | Cry for the Moon</title>
+  </head>
+  {{> header }}
+  <div id="content_wrapper">
+    <body>
+      <div id="main" role="main">
+        <h1>{{ year_num }}年の記事一覧</h1>
+        <ul class="elements_list">
+        {{#each articles as |article| }}
+          <li>
+            <a href="{{ article.path }}">
+              <date datetime="{{ convert_to_iso8601 article.date }}">
+                {{ article.date }}
+              </date>
+              <div>
+                {{ article.title }}
+              </div>
+            </a>
+          </li>
+        {{/each}}
+        </ul>
+        {{#if paginate }}
+        {{> nav_paginate }}
+        {{/if}}
+      </div>
+      {{> menu_column }}
+    </body>
+  </div>
+</html>
