@@ -1,0 +1,15 @@
+<nav class="paginate">
+{{#if paginate.prev_page }}
+<div>
+  <a href="{{ paginate.prev_page }}">&lt;&lt; 前のページ</a>
+</div>
+{{/if}}
+<div>
+  ページ {{ paginate.page_number }} / {{ paginate.num_pages }}
+</div>
+{{#if paginate.next_page }}
+<div>
+  <a href="{{ paginate.next_page }}">次のページ &gt;&gt;</a>
+</div>
+{{/if}}
+</nav>

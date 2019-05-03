@@ -1,0 +1,28 @@
+{
+  "slow_query-2017.06.01": {
+    "mappings": {
+      "query_log": {
+        "properties": {
+          "@timestamp": {
+            "type": "date"
+          },
+          // :
+          // : 中略
+          // :
+          "sql": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "ignore_above": 256
+              }
+            }
+          },
+          // :
+          // : 中略
+          // :
+        }
+      }
+    }
+  }
+}

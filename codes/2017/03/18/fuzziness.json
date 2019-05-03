@@ -1,0 +1,10 @@
+{
+  "query": {
+    "fuzzy": {
+      "title": {
+        "value": "cirme",
+        "fuzziness": 2
+      }
+    }
+  }
+}

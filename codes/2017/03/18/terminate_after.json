@@ -1,0 +1,6 @@
+{
+  "query": {
+    "match_all": {}
+  },
+  "terminate_after": 1
+}
