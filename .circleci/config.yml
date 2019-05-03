@@ -9,13 +9,13 @@ jobs:
     steps:
       - 'checkout'
       - run:
-        # TODO: Do not install AWS CLI while execution CI job.
-        #       That should be bundled with Docker image for CI.
-        name: 'Install AWS CLI'
-        command: |
-          apt-get -y update
-          apt-get install -y awscli
+          # TODO: Do not install AWS CLI while execution CI job.
+          #       That should be bundled with Docker image for CI.
+          name: 'Install AWS CLI'
+          command: |
+            apt-get -y update
+            apt-get install -y awscli
       - run:
-        name: 'Upload files to S3 bucket'
-        command: |
-          aws s3 sync build s3://mozami.me/ --delete
+          name: 'Upload files to S3 bucket'
+          command: |
+            aws s3 sync build s3://mozami.me/ --delete
