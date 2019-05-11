@@ -1,0 +1,15 @@
+version: '3'
+services:
+  salmon:
+    image: 'mozamimy/salmon'
+    container_name: 'salmon'
+    volumes:
+      - '.:/source:cached'
+    working_dir: '/source'
+  nginx:
+    image: 'nginx'
+    container_name: 'nginx'
+    volumes:
+      - './build:/usr/share/nginx/html:ro'
+    ports:
+      - '10080:80'
