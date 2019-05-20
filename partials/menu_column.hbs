@@ -9,7 +9,17 @@
     </p>
   </section>
   <section>
-    <h2>Links</h2>
+    <h2>Pages</h2>
+    <ul class="links">
+      <li>
+        <a href="/gpg.html">
+          <i class="fas fa-key"></i><span>GPG Public Key</span>
+        </a>
+      </li>
+    </ul>
+  </section>
+  <section>
+    <h2>External Links</h2>
     <ul class="links">
       <li>
         <a href="https://github.com/mozamim" target="_blank">
@@ -36,7 +46,7 @@
   <section>
     <h2>Recent Articles</h2>
     <ul class="elements_list">
-    {{#each recent_articles as |recent_article| }}
+      {{#each recent_articles as |recent_article| }}
       <li>
         <a href="{{ recent_article.path }}">
           <date datetime="{{ convert_to_iso8601 recent_article.date }}">
@@ -47,13 +57,13 @@
           </div>
         </a>
       </li>
-    {{/each}}
+      {{/each}}
     </ul>
   </section>
   <section>
     <h2>Tags</h2>
     <ul class="elements_list">
-    {{#each tags as |tag| }}
+      {{#each tags as |tag| }}
       <li>
         <a href="/tags/{{ tag.key }}.html">
           <div>
@@ -62,13 +72,13 @@
           </div>
         </a>
       </li>
-    {{/each}}
+      {{/each}}
     </ul>
   </section>
   <section>
     <h2>By Year</h2>
     <ul class="elements_list">
-    {{#each years as |year| }}
+      {{#each years as |year| }}
       <li>
         <a href="/{{ year.year }}.html">
           <div>
@@ -77,7 +87,7 @@
           </div>
         </a>
       </li>
-    {{/each}}
+      {{/each}}
     </ul>
   </section>
 </aside>
