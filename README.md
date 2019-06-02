@@ -7,8 +7,7 @@ They are supposed to build with [salmon](https://github.com/mozamimy/salmon).
 ## Build
 
 ```sh
-docker-compose pull # If needed
-docker-compose run salmon salmon build
+salmon build
 ```
 
 ## Server
