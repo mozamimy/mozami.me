@@ -4,7 +4,9 @@ date: 2019-06-23
 tags: programming
 ---
 
+<p>
 <img src="/images/2019/06/23/kakinohazushi.png" style="width: 400px;">
+</p>
 
 ゴールデンウィークにワーッと作って、以降もちまちまと改善を進めている Salmon ですが、v0.5.0 をリリースしました。
 
