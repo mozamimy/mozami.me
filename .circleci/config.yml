@@ -18,6 +18,7 @@ jobs:
           command: |
             apt-get -y update
             apt-get install -y awscli
+      - run: 'salmon --version'
       - run:
           name: 'Build static files'
           command: |
