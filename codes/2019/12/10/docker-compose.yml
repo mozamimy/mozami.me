@@ -1,0 +1,10 @@
+version: '3.7'
+services:
+  builder:
+    build:
+      context: '.'
+    volumes:
+      - './:/workspace'
+      - '.cargo-registry:/usr/local/cargo/registry'
+      - '/etc/passwd:/etc/passwd:ro'
+      - '/etc/group:/etc/group:ro'
